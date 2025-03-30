@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Ball</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle, #1a1a1a, #000);
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Courier New', monospace;
+            font-size: 32px;
+            margin-bottom: 5px;
+            color: #ddd;
+        }
+
+        h3 {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            color: #aaa;
+        }
+
+        input {
+            padding: 12px;
+            width: 80%;
+            max-width: 400px;
+            border: 2px solid #444;
+            border-radius: 20px;
+            background: #222;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #444, #666);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #666, #888);
+        }
+
+        .ball {
+            width: 150px;
+            height: 150px;
+            background: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .ball.shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            20%, 80% { transform: rotate(-10deg); }
+            40%, 60% { transform: rotate(10deg); }
+        }
+
+        .answer {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            transition: opacity 0.5s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h3>Ask the</h3>
+    <h1>🔮 MAGIC 8-BALL 🔮</h1>
+    
+    <input type="text" id="question" placeholder="Ask a Yes/No question..." />
+    <br><br>
+    
+    <button id="shake-btn">Shake the 8-Ball</button>
+    
+    <div class="ball" id="magic-ball">
+        <div class="answer" id="answer">🎱</div>
+    </div>
+
+    <script>
+        const answers = [
+            "Yes!", "No.", "Ask again later.", "Definitely!", "I don't think so.",
+            "Absolutely!", "Not sure...", "Try again.", "Signs point to yes.", "Very doubtful."
+        ];
+
+        const button = document.getElementById("shake-btn");
+        const answerBox = document.getElementById("answer");
+        const ball = document.getElementById("magic-ball");
+
+        button.addEventListener("click", function() {
+            const question = document.getElementById("question").value.trim();
+            
+            if (question === "") {
+                answerBox.textContent = "Ask a question!";
+                return;
+            }
+
+            ball.classList.add("shake");
+            answerBox.style.opacity = "0"; 
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * answers.length);
+                answerBox.textContent = answers[randomIndex];
+                answerBox.style.opacity = "1";
+                ball.classList.remove("shake");
+            }, 600);
+        });
+
+    </script>
+</body>
+</html>

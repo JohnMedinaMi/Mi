@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XoX</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: pink;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 5px;
+      margin: auto;
+      max-width: 300px;
+      width: 100%;
+      aspect-ratio: 1; 
+    }
+
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      background-color: #fff;
+      border: 2px solid #000;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      height: 100%;
+    }
+
+    .cell:hover {
+      background-color: #e7e7e7;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    #restart {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    /* Overlay styles */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .overlay-content {
+      font-size: 1.5em;
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 80%;
+      width: 300px;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 600px) {
+      .cell {
+        font-size: 1.5em; /* Smaller text for mobile */
+      }
+
+      #status {
+        font-size: 1em; /* Adjust status font for mobile */
+      }
+
+      #restart {
+        font-size: 0.9em;
+      }
+
+      .overlay-content {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+ <h1>Tic-Tac-Toe</h1>
+  <div class="game-board">
+    
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+  
+  
+
+  <p id="status">Player ❌'s turn</p>
+  <button id="restart">Restart Game</button>
+   <audio id="WINSOUND.mp3" src="WINSOUND.mp3"></audio>
+
+  <!-- Overlay modal -->
+  <div id="overlay" class="overlay">
+    <div class="overlay-content">
+      <p id="resultMessage"></p>
+      <button onclick="closeOverlay()">Close</button>
+    </div>
+  </div>
+  
+  
+
+  <script>
+  
+    const cells = document.querySelectorAll('.cell');
+    const statusText = document.getElementById('status');
+    const restartButton = document.getElementById('restart');
+    const overlay = document.getElementById('overlay');
+    const resultMessage = document.getElementById('resultMessage');
+    let currentPlayer = '❌';
+    let board = ['', '', '', '', '', '', '', '', ''];
+    const winningCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    const winSound = new Audio('win.mp3');
+    const drawSound = new Audio('defeat.mp3');
+
+  
+    function handleClick(event) {
+      const index = event.target.dataset.index;
+      if (board[index] !== '' || checkWinner()) return;
+
+      board[index] = currentPlayer;
+      event.target.textContent = currentPlayer;
+
+      if (checkWinner()) {
+        setTimeout(() => {
+          resultMessage.textContent = `Player ${currentPlayer} wins!`;
+          overlay.style.display = 'flex';
+          winSound.play();
+        }, 200);
+        return;
+      }
+
+      if (board.every(cell => cell !== '')) {
+        setTimeout(() => {
+          resultMessage.textContent = "It's a draw! 💱";
+          overlay.style.display = 'flex';
+          drawSound.play(); 
+        }, 200);
+        return;
+      }
+
+      currentPlayer = currentPlayer === '❌' ? '🔵' : '❌';
+      statusText.textContent = `Player ${currentPlayer}'s turn`;
+    }
+
+    function checkWinner() {
+      return winningCombos.some(combo => {
+        return combo.every(index => board[index] === currentPlayer);
+      });
+    }
+
+    function restartGame() {
+      board.fill('');
+      cells.forEach(cell => cell.textContent = '');
+      currentPlayer = '❌';
+      statusText.textContent = "Player ❌'s turn";
+      overlay.style.display = 'none';
+    }
+
+    function closeOverlay() {
+      overlay.style.display = 'none';
+      restartGame();
+    }
+
+    cells.forEach(cell => cell.addEventListener('click', handleClick));
+    restartButton.addEventListener('click', restartGame);
+  </script>
+</body>
+</html>

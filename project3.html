@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+}
+  .game-container {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+  
+  input {
+    padding: 8px;
+    font-size: 16px;
+    width: 150px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+p {
+    font-size: 18px;
+}
+  </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 1 and 100</p>
+        <input type="number" id="guess" placeholder="Enter your guess">
+        <button id="submitGuess">Submit Guess</button>
+        <p id="message"></p>
+        <p>Attempts: <span id="attempts">0</span></p>
+        <button id="resetGame">Reset Game</button>
+    </div>
+    <script src="script.js">
+  let randomNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+  const guessInput = document.getElementById('guess');
+const submitGuessButton = document.getElementById('submitGuess');
+const message = document.getElementById('message');
+const attemptsDisplay = document.getElementById('attempts');
+const resetButton = document.getElementById('resetGame');
+  submitGuessButton.addEventListener('click', checkGuess);
+resetButton.addEventListener('click', resetGame);
+  function checkGuess() {
+    const userGuess = parseInt(guessInput.value);
+    attempts++;
+    attemptsDisplay.textContent = attempts; 
+    
+    if (userGuess === randomNumber) {
+        message.textContent = 'Congratulations! You guessed the right number!';
+        message.style.color = 'green';
+    } 
+    else if (userGuess > randomNumber) {
+        message.textContent = 'Too high! Try again.';
+        message.style.color = 'red';
+    } 
+    else if (userGuess < randomNumber) {
+        message.textContent = 'Too low! Try again.';
+        message.style.color = 'red';
+    }
+}
+  function resetGame() {
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    attemptsDisplay.textContent = attempts;
+    message.textContent = '';
+    guessInput.value = '';
+}
+  
+  </script>
+</body>
+</html>
